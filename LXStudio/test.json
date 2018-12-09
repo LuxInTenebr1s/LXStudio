@@ -1,0 +1,78 @@
+{
+  "size": {
+    "x": 1200,
+    "y": 960
+  },
+  "objects": {
+    "hex": {
+      "class": "NeoHex",
+      "artnetAddress": "192.168.0.207",
+      "artnetUniverse": 0,
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "rotx": 0,
+      "roty": 0,
+      "rotz": 0
+    },
+    "tree": {
+      "class": "EmpathyTree",
+      "loops": [
+        {
+          "pairs": [
+            {
+              "artnetAddress": "192.168.0.201",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "192.168.0.202",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "192.168.0.203",
+              "artnetUniverse": 0
+            }
+          ]
+        },
+        {
+          "pairs": [
+            {
+              "artnetAddress": "192.168.0.204",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "192.168.0.205",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "192.168.0.206",
+              "artnetUniverse": 0
+            }
+          ]
+        },
+        {
+          "pairs": [
+            {
+              "artnetAddress": "192.168.0.207",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "192.168.0.208",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "192.168.0.209",
+              "artnetUniverse": 0
+            }
+          ]
+        }
+      ],
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "rotx": 0,
+      "roty": 0,
+      "rotz": 0
+    }
+  }
+}

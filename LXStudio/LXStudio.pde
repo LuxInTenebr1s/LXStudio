@@ -21,22 +21,33 @@
 // 
 // ---------------------------------------------------------------------------
 
-// Reference to top-level LX instance
+Config config;
+Model model;
 heronarts.lx.studio.LXStudio lx;
 
 void setup() {
-  // Processing setup, constructs the window and the LX instance
-  size(800, 720, P3D);
-  lx = new heronarts.lx.studio.LXStudio(this, buildModel(), MULTITHREADED);
+  size(1200, 960, P3D);
+  
+  config = new Config();
+  model = new Model(config);
+
+  lx = new heronarts.lx.studio.LXStudio(this, model, MULTITHREADED);
   lx.ui.setResizable(RESIZABLE);
 }
 
 void initialize(final heronarts.lx.studio.LXStudio lx, heronarts.lx.studio.LXStudio.UI ui) {
   // Add custom components or output drivers here
+  try {
+    model.buildOutput(lx);
+  } catch (Exception x) {
+    x.printStackTrace();
+  }
 }
 
 void onUIReady(heronarts.lx.studio.LXStudio lx, heronarts.lx.studio.LXStudio.UI ui) {
-  // Add custom UI components here
+  ui.preview.pointCloud.setModel(new LXModel(model.displayPoints));
+  ui.preview.addComponent(new UISimulation());
+  ui.preview.perspective.setValue(30);
 }
 
 void draw() {
@@ -56,3 +67,6 @@ final static float CM = IN / 2.54;
 final static float MM = CM * .1;
 final static float M = CM * 100;
 final static float METER = M;
+
+final static float PI = 3.1415926;
+final static float TWO_PI = PI * 2;
