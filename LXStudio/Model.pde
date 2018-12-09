@@ -31,8 +31,10 @@ public static class Model extends LXModel {
         obj.addDatagrams(output);
       }
       lx.engine.addOutput(output);
+      println("Output added");
     }
     catch (Exception x) {
+      println("Runtime Exception: " + x);
       throw new RuntimeException(x);
     }
   }
@@ -84,12 +86,23 @@ public static class NeoModel extends LXModel {
   }
 
   public void addDatagrams(LXDatagramOutput output) {
-    String address = this.config.getString("artnetAddress");
+    String address = this.config.getString("artnetAddress", "");
     int universe = this.config.getInt("artnetUniverse");
+    if (address.length() == 0) {
+      println("Empty artnetAddress, skipping");
+      return;
+    }
     println("ArtNet datagram to " + address + ", universe", universe);
-    ArtNetDatagram datagram = new ArtNetDatagram(this, this.config.getInt("artnetUniverse", 0));
-    //datagram.setAddress(this.config.getString("artnetAddress"));
-    //output.addDatagram(datagram);
+    try {
+      ArtNetDatagram datagram = new ArtNetDatagram(this, this.config.getInt("artnetUniverse", 0));
+      datagram.setAddress(address);
+      output.addDatagram(datagram);
+      println("Datagram added");
+    }
+    catch (Exception x) {
+      println("Runtime Exception: " + x);
+      throw new RuntimeException(x);
+    }
   }
 
   public static class Fixture extends LXAbstractFixture {
