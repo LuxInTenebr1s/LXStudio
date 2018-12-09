@@ -169,7 +169,7 @@ public static class EmpathyTree extends NeoModel {
         LXVector pitch = pTop.copy().sub(pBase).normalize().mult(LED_PITCH);
 
         LXVector pLed;
-        if (orient == Orientation.RIGHT) {
+        if (orient == Orientation.LEFT) {
           pLed = pTop.sub(pitch.copy().mult(count));
         }
         else {
