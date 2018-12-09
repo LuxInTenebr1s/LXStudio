@@ -23,7 +23,6 @@
 
 Config config;
 Model model;
-heronarts.lx.studio.LXStudio lx;
 
 void setup() {
   size(1200, 960, P3D);
@@ -31,8 +30,28 @@ void setup() {
   config = new Config();
   model = new Model(config);
 
-  lx = new heronarts.lx.studio.LXStudio(this, model, MULTITHREADED);
-  lx.ui.setResizable(RESIZABLE);
+  boolean headless = false;
+  if (args != null && args.length > 0) {
+    if (args[0].equals("headless")) {
+      headless = true;
+    }
+  }
+
+  if (headless) {
+    println("Starting headless engine");
+    heronarts.lx.LX lx = new LX(model);
+    model.buildOutput(lx);
+    if (args.length > 1) {
+      lx.openProject(new File(args[1]));
+    }
+    lx.engine.start();
+  }
+  else {
+    println("Starting LXStudio with UI");
+    heronarts.lx.studio.LXStudio lx;
+    lx = new heronarts.lx.studio.LXStudio(this, model, MULTITHREADED);
+    lx.ui.setResizable(RESIZABLE);
+  }
 }
 
 void initialize(final heronarts.lx.studio.LXStudio lx, heronarts.lx.studio.LXStudio.UI ui) {
