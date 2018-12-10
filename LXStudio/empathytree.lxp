@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1544318311926,
+  "timestamp": 1544399641519,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -114,7 +114,7 @@
           "selected": true,
           "enabled": true,
           "cue": false,
-          "fader": 0.7285714223980904,
+          "fader": 0.8999999947845936,
           "crossfadeGroup": 0,
           "blendMode": 1,
           "midiMonitor": false,
@@ -198,68 +198,6 @@
         "enabled": false
       }
     },
-    "audio": {
-      "id": 16,
-      "class": "heronarts.lx.audio.LXAudioEngine",
-      "modulationColor": -8126209,
-      "parameters": {
-        "label": "Audio",
-        "enabled": true,
-        "mode": 0
-      },
-      "meter": {
-        "id": 19,
-        "class": "heronarts.lx.audio.GraphicMeter",
-        "modulationColor": -7012097,
-        "parameters": {
-          "label": "Meter",
-          "running": true,
-          "trigger": false,
-          "gain": 24.95999962091446,
-          "range": 28.20000061020255,
-          "attack": 18.000001832842827,
-          "release": 96.09999685883524,
-          "slope": 5.100000014528632,
-          "Band-1": 0.0,
-          "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.0,
-          "Band-5": 0.0,
-          "Band-6": 0.0,
-          "Band-7": 0.0,
-          "Band-8": 0.0,
-          "Band-9": 0.02141992011452576,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
-          "Band-12": 0.0,
-          "Band-13": 0.0,
-          "Band-14": 0.06228609382603478,
-          "Band-15": 0.20011211501359727,
-          "Band-16": 0.12377695129490107
-        }
-      },
-      "input": {
-        "id": 17,
-        "class": "heronarts.lx.audio.LXAudioInput",
-        "modulationColor": -16753921,
-        "parameters": {
-          "label": "Audio Input",
-          "device": 1
-        }
-      },
-      "output": {
-        "id": 18,
-        "class": "heronarts.lx.audio.LXAudioOutput",
-        "modulationColor": -16711914,
-        "parameters": {
-          "label": "Audio Output",
-          "file": "",
-          "trigger": false,
-          "looping": false,
-          "play": false
-        }
-      }
-    },
     "output": {
       "id": 15,
       "class": "heronarts.lx.LXEngine$Output",
@@ -297,7 +235,7 @@
             "phase": 0.0,
             "exp": 0.0
           },
-          "basis": 0.3314748029192608
+          "basis": 0.49738499997289365
         }
       ],
       "modulations": [
@@ -363,7 +301,7 @@
         "centerPoint": false,
         "camera": {
           "active": true,
-          "radius": 580.6851104373231,
+          "radius": 564.0788922892524,
           "theta": 3.16199999999999,
           "phi": -0.9367166738510174,
           "x": 0.34448814392089844,
@@ -373,7 +311,7 @@
         "cue": [
           {
             "active": true,
-            "radius": 580.6851104373231,
+            "radius": 564.0788922892524,
             "theta": 3.16199999999999,
             "phi": -0.9367166738510174,
             "x": 0.34448814392089844,
