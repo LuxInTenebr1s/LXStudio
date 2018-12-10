@@ -89,3 +89,20 @@ final static float METER = M;
 
 final static float PI = 3.1415926;
 final static float TWO_PI = PI * 2;
+
+static int modulo(int x, int mod) {
+  if (x < 0) {
+    x = mod + x;
+  }
+  return x % mod;
+}
+
+static float modulo(float x, float mod) {
+  while (x < 0) {
+    x += mod;
+  }
+  while (x > mod) {
+    x -= mod;
+  }
+  return x;
+}
