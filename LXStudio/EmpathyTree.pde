@@ -4,15 +4,24 @@ public static class EmpathyTree extends NeoModel {
   public final static int LOOPS = 3;
   public final static int STEP = 3;
   public final static int FEET_NUM = STEP * LOOPS;
+  public final static float BEAM_LENGTH = 4.2 * METER;
+  public final static float LED_STRIP_LENGTH = 5 * METER / 2;
+  public final static float LED_PITCH = METER / 48 * 3;
+  public final static int LEDS_PER_BEAM = floor(LED_STRIP_LENGTH/LED_PITCH);
+
 
   public final List<Loop> loops;
 
   EmpathyTree(JSONObject config) {
     super(new Fixture(config));
     Fixture f = (Fixture)this.fixtures.get(0);
-    loops = f.loops;
+    loops = Collections.unmodifiableList(f.loops);
     view = new View(this);
     update();
+
+    for (Loop l : loops) {
+      l.printNeighbours();
+    }
   }
 
   void addDatagrams(LXDatagramOutput output) {
@@ -29,7 +38,7 @@ public static class EmpathyTree extends NeoModel {
       super(config);
 
       JSONArray confLoops = config.getJSONArray("loops");
-      for (int i = 0; i < LOOPS; i++) {
+      for (int i = 0; i < 3; i++) {
         Loop l = new Loop(confLoops.getJSONObject(i), i);
         loops.add(l);
         addPoints(l);
@@ -54,6 +63,7 @@ public static class EmpathyTree extends NeoModel {
   }
 
   public static class Loop extends NeoModel {
+    public final int loopIdx;
     public final List<BeamPair> pairs;
     public final List<Beam> beams = new ArrayList<Beam>();
 
@@ -61,11 +71,26 @@ public static class EmpathyTree extends NeoModel {
       super(new Fixture(config, loopIdx));
 
       Fixture f = (Fixture)this.fixtures.get(0);
-      pairs = f.pairs;
+      pairs = Collections.unmodifiableList(f.pairs);
+      this.loopIdx = loopIdx;
 
       for (BeamPair p : pairs) {
         beams.add(p.left);
         beams.add(p.right);
+      }
+
+      for (int i = 0; i < pairs.size(); i++) {
+        BeamPair p = pairs.get(i);
+        BeamPair next = pairs.get(modulo(i-1, STEP));
+        BeamPair prev = pairs.get(modulo(i+1, STEP));
+
+      }
+    }
+
+    void printNeighbours() {
+      println("Loop", loopIdx);
+      for (BeamPair p : pairs) {
+        p.printNeighbours();
       }
     }
 
@@ -85,20 +110,41 @@ public static class EmpathyTree extends NeoModel {
         for (int i = 0; i < STEP; i++) {
           BeamPair bp = new BeamPair(confPairs.getJSONObject(i), loopIdx + i*STEP);
           pairs.add(bp);
-          addPoints(bp);
+        }
+
+        for (int i = 0; i < STEP; i++) {
+          BeamPair p = pairs.get(i);
+          BeamPair next = pairs.get(modulo(i+1, STEP));
+          BeamPair prev = pairs.get(modulo(i-1, STEP));
+          p.left.nBase = p.right;
+          p.left.nTop = next.right;
+          p.right.nBase = p.left;
+          p.right.nTop = prev.left;
+          addPoints(p.right);
+          addPoints(p.right.nTop);
         }
       }
     }
   }
 
   public static class BeamPair extends NeoModel {
+    public final int pairIdx;
     public final Beam left, right;
 
     BeamPair(JSONObject config, int pairIdx) {
       super(new Fixture(config, pairIdx));
+      this.pairIdx = pairIdx;
       Fixture f = (Fixture)this.fixtures.get(0);
       left = f.left;
       right = f.right;
+    }
+
+    void printNeighbours() {
+      println("  BeamPair", pairIdx);
+      println("    Left:");
+      left.printNeighbours();
+      println("    Right:");
+      right.printNeighbours();
     }
 
     private static class Fixture extends NeoModel.Fixture {
@@ -110,6 +156,8 @@ public static class EmpathyTree extends NeoModel {
         addPoints(left);
         right = new Beam(pairIdx, Beam.Orientation.RIGHT);
         addPoints(right);
+        left.nBase = right;
+        right.nBase = left;
       }
     }
   }
@@ -120,6 +168,8 @@ public static class EmpathyTree extends NeoModel {
     public final Orientation orient;
 
     public final LXVector pBase, pTop;
+    public Beam nBase, nTop;
+    public Beam nLedBase, nLedTop;
 
     Beam(int pairIdx, Orientation orient) {
       super(new Fixture(pairIdx, orient));
@@ -130,6 +180,10 @@ public static class EmpathyTree extends NeoModel {
       this.pTop = f.pTop;
     }
 
+    void printNeighbours() {
+      println("      len:", size, "base:", nBase.pairIdx, "top:", nTop.pairIdx);
+    }
+
     void draw(heronarts.p3lx.ui.UI ui, PGraphics pg) {
       //final static int RES = 6;
       pg.stroke(#966F33);
@@ -137,13 +191,11 @@ public static class EmpathyTree extends NeoModel {
           pBase.x, pBase.y, pBase.z,
           pTop.x, pTop.y, pTop.z
           );
+
+      pg.text(pairIdx, pBase.x, pBase.y, pBase.z - 10 * CM);
     }
 
     private static class Fixture extends LXAbstractFixture {
-      public final static float BEAM_LENGTH = 4.2 * METER;
-      public final static float LED_STRIP_LENGTH = 5 * METER / 2;
-      public final static float LED_PITCH = METER / 48 * 3;
-
       public final LXVector pBase, pTop;
 
       Fixture(int idx, Orientation orient) {
