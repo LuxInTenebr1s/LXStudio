@@ -1,10 +1,10 @@
-public abstract class EmpathyTreePattern extends LXModelPattern<Model> {
+public abstract class EmpathyTreePattern extends NeoPattern {
   public EmpathyTreePattern(LX lx) {
-    super(lx);
+    super(lx, "tree");
   }
 
   public EmpathyTree getTree() {
-    return (EmpathyTree)(model.objects.get("tree"));
+    return (EmpathyTree)getObject("tree");
   }
 
   public List<EmpathyTree.Loop> getLoops() {
@@ -12,7 +12,15 @@ public abstract class EmpathyTreePattern extends LXModelPattern<Model> {
   }
 }
 
-@LXCategory("Form")
+@LXCategory("EmpathyTree")
+public class EmpathyTreeGradient extends NeoGradientPattern {
+  GradientPattern gradient;
+  public EmpathyTreeGradient(LX lx) {
+    super(lx, "tree");
+  }
+}
+
+@LXCategory("EmpathyTree Form")
 public class LoopIteratorPattern extends EmpathyTreePattern {
   public final CompoundParameter pos = new CompoundParameter("Pos", 0, 0, 1)
     .setDescription("Position of the center of the plane");
@@ -67,7 +75,7 @@ public class LoopIteratorPattern extends EmpathyTreePattern {
   }
 }
 
-@LXCategory("Form")
+@LXCategory("EmpathyTree Form")
 public class SpiralPattern extends EmpathyTreePattern {
   public final CompoundParameter speed = new CompoundParameter("Speed", 10, 1, 100)
     .setDescription("Speed");
