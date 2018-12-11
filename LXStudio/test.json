@@ -15,6 +15,17 @@
       "roty": 0,
       "rotz": 0
     },
+    "triangle": {
+      "class": "NeoHex",
+      "artnetAddress": "192.168.5.138",
+      "artnetUniverse": 0,
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "rotx": 0,
+      "roty": 0,
+      "rotz": 0
+    },
     "tree": {
       "class": "EmpathyTree",
       "loops": [
