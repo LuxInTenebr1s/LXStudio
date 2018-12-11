@@ -41,7 +41,7 @@ public static class PlanePattern extends LXPattern {
   }
 }
 
-public abstract class NeoPattern extends LXModelPattern<Model> {
+public abstract static class NeoPattern extends LXModelPattern<Model> {
   NeoModel obj;
   public NeoPattern(LX lx, String name) {
     super(lx);
@@ -55,7 +55,7 @@ public abstract class NeoPattern extends LXModelPattern<Model> {
 
 
 @LXCategory(LXCategory.COLOR)
-public class NeoGradientPattern extends NeoPattern {
+public static class NeoGradientPattern extends NeoPattern {
 
   public final CompoundParameter gradient = (CompoundParameter)
     new CompoundParameter("Gradient", 0, -360, 360)

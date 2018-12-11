@@ -1,4 +1,4 @@
-public abstract class NeoTrianglePattern extends NeoPattern {
+public abstract static class NeoTrianglePattern extends NeoPattern {
   public NeoTrianglePattern(LX lx) {
     super(lx, "triangle");
   }
@@ -9,14 +9,14 @@ public abstract class NeoTrianglePattern extends NeoPattern {
 }
 
 @LXCategory("Triangle")
-public class NeoTriangleGradient extends NeoGradientPattern {
+public static class NeoTriangleGradient extends NeoGradientPattern {
   public NeoTriangleGradient(LX lx) {
     super(lx, "triangle");
   }
 }
 
 @LXCategory("Triangle Form")
-public class SideStripePattern extends NeoTrianglePattern {
+public static class SideStripePattern extends NeoTrianglePattern {
   public final CompoundParameter pos = new CompoundParameter("Pos", 0, 1)
     .setDescription("Position");
   
@@ -45,7 +45,7 @@ public class SideStripePattern extends NeoTrianglePattern {
 }
 
 @LXCategory("Triangle Form")
-public class AllStripePattern extends NeoTrianglePattern {
+public static class AllStripePattern extends NeoTrianglePattern {
   public final CompoundParameter pos = new CompoundParameter("Pos", 0, 1)
     .setDescription("Position");
   
