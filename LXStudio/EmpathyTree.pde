@@ -11,6 +11,7 @@ public static class EmpathyTree extends NeoModel {
 
 
   public final List<Loop> loops;
+  public final List<BeamPair> pairs;
 
   EmpathyTree(JSONObject config) {
     super(new Fixture(config));
@@ -19,6 +20,56 @@ public static class EmpathyTree extends NeoModel {
     view = new View(this);
     update();
 
+    List<BeamPair> pairs_ = new ArrayList<BeamPair>(Collections.nCopies(FEET_NUM, (BeamPair)null));
+    for (Loop l : loops) {
+      for (BeamPair p : l.pairs) {
+        pairs_.set(p.pairIdx, p);
+      }
+    }
+    pairs = Collections.unmodifiableList(pairs_);
+
+    LXVector ref = new LXVector(1, 0, 0);
+    for (BeamPair p : pairs) {
+      BeamPair nextPair = pairs.get(modulo(p.pairIdx+LOOPS+1, FEET_NUM));
+      p.left.nTop = p.right;
+      p.right.nTop = p.left;
+      p.left.nBase = nextPair.right;
+      nextPair.right.nBase = p.left;
+      for (int i = 0; i < 2*STEP; i++) {
+        BeamPair other = pairs.get(modulo(p.pairIdx + LOOPS + 1 + i, FEET_NUM));
+        println("beam", p.left.pairIdx, p.left.orient, "intersects", other.right.pairIdx, other.right.orient);
+        p.left.intersect.add(other.right);
+        other.right.intersect.add(p.left);
+      }
+    }
+      // find which other.lefts intersect our p.right
+    for (BeamPair p : pairs) {
+      Beam b = p.right;
+      int ledIdx = 0;
+      int otherIdx = 1;
+      Beam other = b.intersect.get(otherIdx);
+      for (ledIdx = 0; ledIdx < min(b.points.length, other.points.length); ledIdx++) {
+        println("otheridx", otherIdx);
+        if (otherIdx >= b.intersect.size()) {
+          break;
+        }
+        other = b.intersect.get(otherIdx);
+        float bAngle = theta(b.points[ledIdx]);
+        float otherAngle = theta(other.points[other.points.length - ledIdx -1]);
+        println("pair", p.pairIdx, "bAngle", bAngle, "other", other.pairIdx, "otherAngle", otherAngle);
+        if (otherAngle >= bAngle) {
+          b.addSegment(ledIdx, other);
+          other.addSegment(ledIdx, b);
+          otherIdx++;
+        }
+      }
+      /*
+      other = b.intersect.get(otherIdx-1);
+      b.addSegment(ledIdx, other);
+      other.addSegment(ledIdx, b);
+      */
+
+    }
     for (Loop l : loops) {
       l.printNeighbours();
     }
@@ -71,7 +122,7 @@ public static class EmpathyTree extends NeoModel {
       super(new Fixture(config, loopIdx));
 
       Fixture f = (Fixture)this.fixtures.get(0);
-      pairs = Collections.unmodifiableList(f.pairs);
+      pairs = f.pairs;
       this.loopIdx = loopIdx;
 
       for (BeamPair p : pairs) {
@@ -110,18 +161,7 @@ public static class EmpathyTree extends NeoModel {
         for (int i = 0; i < STEP; i++) {
           BeamPair bp = new BeamPair(confPairs.getJSONObject(i), loopIdx + i*STEP);
           pairs.add(bp);
-        }
-
-        for (int i = 0; i < STEP; i++) {
-          BeamPair p = pairs.get(i);
-          BeamPair next = pairs.get(modulo(i+1, STEP));
-          BeamPair prev = pairs.get(modulo(i-1, STEP));
-          p.left.nBase = p.right;
-          p.left.nTop = next.right;
-          p.right.nBase = p.left;
-          p.right.nTop = prev.left;
-          addPoints(p.right);
-          addPoints(p.right.nTop);
+          addPoints(bp);
         }
       }
     }
@@ -141,9 +181,7 @@ public static class EmpathyTree extends NeoModel {
 
     void printNeighbours() {
       println("  BeamPair", pairIdx);
-      println("    Left:");
       left.printNeighbours();
-      println("    Right:");
       right.printNeighbours();
     }
 
@@ -156,8 +194,6 @@ public static class EmpathyTree extends NeoModel {
         addPoints(left);
         right = new Beam(pairIdx, Beam.Orientation.RIGHT);
         addPoints(right);
-        left.nBase = right;
-        right.nBase = left;
       }
     }
   }
@@ -169,10 +205,12 @@ public static class EmpathyTree extends NeoModel {
 
     public final LXVector pBase, pTop;
     public Beam nBase, nTop;
-    public Beam nLedBase, nLedTop;
+    public List<Beam> intersect = new ArrayList<Beam>();
+    public List<Segment> segments = new ArrayList<Segment>();
 
     Beam(int pairIdx, Orientation orient) {
       super(new Fixture(pairIdx, orient));
+      println("new Beam", pairIdx, orient);
       Fixture f = (Fixture)this.fixtures.get(0);
       this.pairIdx = pairIdx;
       this.orient = orient;
@@ -181,7 +219,19 @@ public static class EmpathyTree extends NeoModel {
     }
 
     void printNeighbours() {
-      println("      len:", size, "base:", nBase.pairIdx, "top:", nTop.pairIdx);
+      println("      Beam", pairIdx, orient, ": base", pBase, "top", pTop);
+      println("      len:", size, "nBase:", nBase.pairIdx, nBase.orient, "nTop:", nTop.pairIdx, nTop.orient);
+      println("      Segments:");
+      for (Segment s : segments) {
+        println("        led ", s.led, ":", s.beam.pairIdx, s.beam.orient);
+      }
+    }
+
+    Segment addSegment(int led, Beam beam) {
+      Segment s = new Segment(led, beam);
+      segments.add(s);
+      println("        beam", pairIdx, orient, "segment", led, beam.pairIdx, beam.orient);
+      return s;
     }
 
     void draw(heronarts.p3lx.ui.UI ui, PGraphics pg) {
@@ -192,7 +242,9 @@ public static class EmpathyTree extends NeoModel {
           pTop.x, pTop.y, pTop.z
           );
 
-      pg.text(pairIdx, pBase.x, pBase.y, pBase.z - 10 * CM);
+      if (orient == Orientation.RIGHT) {
+        pg.text(pairIdx, pBase.x, pBase.y, pBase.z - 10 * CM);
+      }
     }
 
     private static class Fixture extends LXAbstractFixture {
@@ -200,20 +252,23 @@ public static class EmpathyTree extends NeoModel {
 
       Fixture(int idx, Orientation orient) {
         int step;
-        if (orient == Orientation.RIGHT) {
+        int shift;
+        if (orient == Orientation.LEFT) {
           step = STEP;
+          shift = STEP;
         } else {
           step = -STEP;
+          shift = 0;
         }
 
         // calculate positions of beam ends
         // "Base" end position is simple
-        pBase = new LXVector(R_BASE, 0, 0).rotate(TWO_PI/FEET_NUM*idx);
+        pBase = new LXVector(R_BASE, 0, 0).rotate(TWO_PI/FEET_NUM*(idx+shift));
 
         // "Top" is more complicated. First, find the position of the top point
         // projection to the base plane, with a similar method as Base, but
         // rotated.
-        pTop = new LXVector(R_TOP, 0, 0).rotate(TWO_PI/FEET_NUM*(idx+step));
+        pTop = new LXVector(R_TOP, 0, 0).rotate(TWO_PI/FEET_NUM*(idx+shift+step));
         // Then, calculate Z position of the top point using some trigonometry
         pTop.add(0, 0, sqrt(BEAM_LENGTH*BEAM_LENGTH - pTop.copy().sub(pBase).magSq()));
 
@@ -222,13 +277,12 @@ public static class EmpathyTree extends NeoModel {
 
         LXVector pLed;
         if (orient == Orientation.LEFT) {
-          pLed = pTop.sub(pitch.copy().mult(count));
+          pLed = pTop.copy().sub(pitch.copy().mult(count));
         }
         else {
-          pLed = pTop;
+          pLed = pTop.copy().sub(pitch);
           pitch = pitch.mult(-1);
         }
-        println("Beam", idx, ": base", pBase, "top", pTop);
 
         for (int i = 0; i < count; i++) {
           LXPoint p = new LXPoint(pLed);
@@ -239,6 +293,14 @@ public static class EmpathyTree extends NeoModel {
     }
   }
 
+  public static class Segment {
+    int led;
+    Beam beam;
+    Segment(int led, Beam beam) {
+      this.led = led;
+      this.beam = beam;
+    }
+  }
 
 }
 
