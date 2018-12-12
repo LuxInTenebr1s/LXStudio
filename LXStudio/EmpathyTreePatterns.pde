@@ -1,14 +1,8 @@
 public abstract static class EmpathyTreePattern extends NeoPattern {
+  public final EmpathyTree tree;
   public EmpathyTreePattern(LX lx) {
     super(lx, "tree");
-  }
-
-  public EmpathyTree getTree() {
-    return (EmpathyTree)getObject("tree");
-  }
-
-  public List<EmpathyTree.Loop> getLoops() {
-    return getTree().loops;
+    tree = (EmpathyTree)getObject("tree");
   }
 }
 
@@ -17,6 +11,59 @@ public static class EmpathyTreeGradient extends NeoGradientPattern {
   GradientPattern gradient;
   public EmpathyTreeGradient(LX lx) {
     super(lx, "tree");
+  }
+}
+
+@LXCategory("EmpathyTree Form")
+public static class EmpathyTreeSparklesPattern extends SparklesPattern {
+  GradientPattern gradient;
+  public EmpathyTreeSparklesPattern(LX lx) {
+    super(lx, "tree");
+  }
+}
+
+@LXCategory("EmpathyTree Form")
+public static class EmpathyTreeTestPattern extends EmpathyTreePattern {
+  public enum Mode {
+    Loop,
+    Pair
+  };
+  public final EnumParameter<Mode> mode = new EnumParameter<Mode>("Mode", Mode.Loop);
+  public final DiscreteParameter loopIdx = new DiscreteParameter("Loop", tree.LOOPS);
+  public final DiscreteParameter pairIdx = new DiscreteParameter("Pair", tree.STEP);
+  public final BooleanParameter left = new BooleanParameter("Left", true);
+  public final BooleanParameter right = new BooleanParameter("Right", true);
+
+  public EmpathyTreeTestPattern(LX lx) {
+    super(lx);
+    addParameter("mode", this.mode);
+    addParameter("loop", this.loopIdx);
+    addParameter("pair", this.pairIdx);
+    addParameter("left", this.left);
+    addParameter("right", this.right);
+  }
+
+  public void run(double deltaMs) {
+    Mode mode = this.mode.getEnum();
+    int loopIdx = this.loopIdx.getValuei();
+    int pairIdx = loopIdx + this.pairIdx.getValuei() * tree.STEP;
+    final int clOn = 0xFFFFFFFF;
+    final int clOff = 0xFF000000;
+    int c = clOff;
+    for (EmpathyTree.Loop l : tree.loops) {
+      for (EmpathyTree.BeamPair p : l.pairs) {
+        if (mode == Mode.Loop) {
+          c = (l.loopIdx == loopIdx) ? clOn : clOff;
+        }
+        else if (mode == Mode.Pair) {
+          c = (l.loopIdx == loopIdx && p.pairIdx == pairIdx) ? clOn : clOff;
+        }
+        for (int i = 0; i < p.left.size; i++) {
+          colors[p.left.points[i].index] = this.left.isOn() ? c : clOff;
+          colors[p.right.points[i].index] = this.right.isOn() ? c : clOff;
+        }
+      }
+    }
   }
 }
 
@@ -50,7 +97,7 @@ public static class LoopIteratorPattern extends EmpathyTreePattern {
     prevPos = pos;
     
     pos = 1.5*pos-0.25;
-    for (EmpathyTree.Loop l : getLoops()) {
+    for (EmpathyTree.Loop l : tree.loops) {
       for (EmpathyTree.BeamPair bp : l.pairs) {
         EmpathyTree.Beam bOn, bOff;
         if (direction) {
@@ -111,7 +158,7 @@ public static class SpiralPattern extends EmpathyTreePattern {
       float offset = this.offset.getValuef();
       float falloff = 100 / this.wth.getValuef();
 
-      for (EmpathyTree.Loop l : getLoops()) {
+      for (EmpathyTree.Loop l : tree.loops) {
         for (EmpathyTree.BeamPair bp : l.pairs) {
           EmpathyTree.Beam bOn, bOff;
           switch (this.direction.getEnum()) {
