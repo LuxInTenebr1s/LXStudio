@@ -1,3 +1,6 @@
+import java.util.Random;
+import java.util.ListIterator;
+
 // In this file you can define your own custom patterns
 
 // Here is a fairly basic example pattern that renders a plane that can be moved
@@ -46,13 +49,13 @@ public abstract static class NeoPattern extends LXModelPattern<Model> {
   public NeoPattern(LX lx, String name) {
     super(lx);
     obj = getObject(name);
+    //model = obj;
   }
 
   public NeoModel getObject(String name) {
     return (NeoModel)(model.objects.get(name));
   }
 }
-
 
 @LXCategory(LXCategory.COLOR)
 public static class NeoGradientPattern extends NeoPattern {
@@ -152,3 +155,75 @@ public static class NeoGradientPattern extends NeoPattern {
     }
   }
 }
+
+@LXCategory("Form")
+public static class SparklesPattern extends NeoPattern {
+  public final CompoundParameter density = new CompoundParameter("Density", 0, 1)
+    .setDescription("Probability of point to become lit");
+ 
+  public final CompoundParameter size = new CompoundParameter("Size", 0, 1)
+    .setDescription("Sparkle size");
+ 
+  public final CompoundParameter fadein = new CompoundParameter("Fadein", 10, 0, 100)
+    .setDescription("Fadein time");
+
+  public final CompoundParameter fadeout = new CompoundParameter("Fadeout", 10, 0, 100)
+    .setDescription("Fadeout time");
+
+  private Random rnd = new Random();
+  private List<Sparkle> sparkles = new ArrayList<Sparkle>();
+  private float timeSinceLast = 0;
+
+  SparklesPattern(LX lx, String name) {
+    super(lx, name);
+    addParameter("density", this.density);
+    addParameter("size", this.size);
+    addParameter("fadein", this.fadein);
+    addParameter("fadeout", this.fadeout);
+  }
+
+
+  @Override
+  public void run(double deltaMs) {
+    int totalSparkles = int(this.density.getValuef() * model.points.length);
+    float falloff = 100 / this.size.getValuef();
+    float fadein = this.fadein.getValuef() * 10;
+    float fadeout = this.fadeout.getValuef() * 10;
+
+    ListIterator<Sparkle> slt = sparkles.listIterator();
+
+    while (slt.hasNext()) {
+      Sparkle s = slt.next();
+      s.t += deltaMs;
+      if (s.t/10 > fadein + fadeout) {
+        slt.remove();
+      }
+    }
+
+    timeSinceLast += deltaMs;
+    if (sparkles.size() < totalSparkles && timeSinceLast > fadein/3) {
+      LXPoint randomPoint = model.points[rnd.nextInt(model.points.length)];
+      sparkles.add(new Sparkle(randomPoint));
+      timeSinceLast = 0;
+    }
+
+    for (LXPoint p : model.points) {
+      float brightness = 0;
+      LXVector pv = new LXVector(p);
+      for (Sparkle sp : sparkles) {
+        float d = pv.dist(sp.p);
+        brightness += max(0, 100 - falloff*abs(d));
+      }
+      colors[p.index] = LXColor.gray(brightness);
+    }
+  }
+
+  public static class Sparkle {
+    LXVector p;
+    float t;
+    Sparkle(LXPoint p) {
+      this.p = new LXVector(p);
+    }
+  }
+ 
+};
