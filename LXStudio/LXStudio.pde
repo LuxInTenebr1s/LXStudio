@@ -89,6 +89,7 @@ final static float METER = M;
 
 final static float PI = 3.1415926;
 final static float TWO_PI = PI * 2;
+final static LXVector X_AXIS = new LXVector(1, 0, 0);
 
 static int modulo(int x, int mod) {
   if (x < 0) {
@@ -105,4 +106,12 @@ static float modulo(float x, float mod) {
     x -= mod;
   }
   return x;
+}
+
+// check on which side of a line through [a, b] the point x is situated
+//private float pointRel(LXPoint x, LXVector a, LXVector b) {
+//}
+
+static float theta(LXPoint p) {
+  return LXVector.angleBetween(X_AXIS, new LXVector(p.x, p.y, 0));
 }
