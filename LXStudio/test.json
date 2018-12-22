@@ -36,7 +36,7 @@
               "artnetUniverse": 0
             },
             {
-              "artnetAddress": "192.168.5.184",
+              "artnetAddress": "192.168.5.185",
               "artnetUniverse": 0
             },
             {
@@ -48,15 +48,15 @@
         {
           "pairs": [
             {
-              "artnetAddress": "",
+              "artnetAddress": "192.168.5.184",
               "artnetUniverse": 0
             },
             {
-              "artnetAddress": "",
+              "artnetAddress": "192.168.5.164",
               "artnetUniverse": 0
             },
             {
-              "artnetAddress": "",
+              "artnetAddress": "192.168.5.241",
               "artnetUniverse": 0
             }
           ]
@@ -64,15 +64,15 @@
         {
           "pairs": [
             {
-              "artnetAddress": "",
+              "artnetAddress": "192.168.5.179",
               "artnetUniverse": 0
             },
             {
-              "artnetAddress": "",
+              "artnetAddress": "192.168.5.186",
               "artnetUniverse": 0
             },
             {
-              "artnetAddress": "",
+              "artnetAddress": "192.168.5.196",
               "artnetUniverse": 0
             }
           ]
