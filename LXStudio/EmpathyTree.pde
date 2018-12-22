@@ -46,20 +46,24 @@ public static class EmpathyTree extends NeoModel {
     for (BeamPair p : pairs) {
       Beam b = p.right;
       int ledIdx = 0;
+      int ledIdxPrev = 0;
       int otherIdx = 1;
       Beam other = b.intersect.get(otherIdx);
       for (ledIdx = 0; ledIdx < min(b.points.length, other.points.length); ledIdx++) {
-        println("otheridx", otherIdx);
         if (otherIdx >= b.intersect.size()) {
           break;
         }
         other = b.intersect.get(otherIdx);
         float bAngle = theta(b.points[ledIdx]);
         float otherAngle = theta(other.points[other.points.length - ledIdx -1]);
-        println("pair", p.pairIdx, "bAngle", bAngle, "other", other.pairIdx, "otherAngle", otherAngle);
-        if (otherAngle >= bAngle) {
+        //println("pair", p.pairIdx, "bAngle", bAngle, "other", other.pairIdx, "otherAngle", otherAngle);
+        if (otherAngle <= bAngle) {
+          Segment s = new Segment();
+          s.beam = other;
+          s.ledFirst = ledIdxPrev;
+          s.ledLast = ledIdx;
           b.addSegment(ledIdx, other);
-          other.addSegment(ledIdx, b);
+          ledIdxPrev = ledIdx;
           otherIdx++;
         }
       }
@@ -223,12 +227,14 @@ public static class EmpathyTree extends NeoModel {
       println("      len:", size, "nBase:", nBase.pairIdx, nBase.orient, "nTop:", nTop.pairIdx, nTop.orient);
       println("      Segments:");
       for (Segment s : segments) {
-        println("        led ", s.led, ":", s.beam.pairIdx, s.beam.orient);
+        println("        led ", s.ledFirst, ":", s.beam.pairIdx, s.beam.orient);
       }
     }
 
     Segment addSegment(int led, Beam beam) {
-      Segment s = new Segment(led, beam);
+      Segment s = new Segment();
+      s.ledFirst = led;
+      s.beam = beam;
       segments.add(s);
       println("        beam", pairIdx, orient, "segment", led, beam.pairIdx, beam.orient);
       return s;
@@ -294,12 +300,8 @@ public static class EmpathyTree extends NeoModel {
   }
 
   public static class Segment {
-    int led;
+    int ledFirst, ledLast;
     Beam beam;
-    Segment(int led, Beam beam) {
-      this.led = led;
-      this.beam = beam;
-    }
   }
 
 }
