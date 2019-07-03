@@ -17,7 +17,7 @@
     },
     "triangle": {
       "class": "NeoHex",
-      "artnetAddress": "192.168.5.138",
+      "artnetAddress": "192.168.0.243",
       "artnetUniverse": 0,
       "x": 0,
       "y": 0,
@@ -26,21 +26,25 @@
       "roty": 0,
       "rotz": 0
     },
-    "tree": {
-      "class": "EmpathyTree",
+    "tower": {
+      "class": "NeoTower",
       "loops": [
         {
           "pairs": [
             {
-              "artnetAddress": "192.168.5.203",
+              "artnetAddress": "",
               "artnetUniverse": 0
             },
             {
-              "artnetAddress": "192.168.5.185",
+              "artnetAddress": "",
               "artnetUniverse": 0
             },
             {
-              "artnetAddress": "192.168.5.232",
+              "artnetAddress": "",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "",
               "artnetUniverse": 0
             }
           ]
@@ -48,31 +52,19 @@
         {
           "pairs": [
             {
-              "artnetAddress": "192.168.5.184",
+              "artnetAddress": "",
               "artnetUniverse": 0
             },
             {
-              "artnetAddress": "192.168.5.164",
+              "artnetAddress": "",
               "artnetUniverse": 0
             },
             {
-              "artnetAddress": "192.168.5.241",
-              "artnetUniverse": 0
-            }
-          ]
-        },
-        {
-          "pairs": [
-            {
-              "artnetAddress": "192.168.5.179",
+              "artnetAddress": "",
               "artnetUniverse": 0
             },
             {
-              "artnetAddress": "192.168.5.186",
-              "artnetUniverse": 0
-            },
-            {
-              "artnetAddress": "192.168.5.196",
+              "artnetAddress": "",
               "artnetUniverse": 0
             }
           ]

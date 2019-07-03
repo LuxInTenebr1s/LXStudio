@@ -44,8 +44,9 @@ public static class NeoTriangle extends NeoModel {
 
     public static class Fixture extends LXAbstractFixture {
       Fixture(int idx) {
-        LXVector pLed = new LXVector(sqrt(3)/3*SIDE_LEN, 0, 0).rotate(TWO_PI/SIDE_NUM*idx);
-        LXVector pitch = new LXVector(1, 0, 0).rotate(TWO_PI/SIDE_NUM*idx + 5*PI/6).mult(LED_PITCH);
+        float rot = PI/3;
+        LXVector pLed = new LXVector(sqrt(3)/3*SIDE_LEN, 0, 0).rotate(TWO_PI/SIDE_NUM*idx + rot);
+        LXVector pitch = new LXVector(1, 0, 0).rotate(TWO_PI/SIDE_NUM*idx + 5*PI/6 + rot).mult(LED_PITCH);
         for (int i = 0; i < LEDS_PER_SIDE; i++) {
           LXPoint p = new LXPoint(pLed);
           println("point", pLed);

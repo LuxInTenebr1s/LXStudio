@@ -1,8 +1,8 @@
-public static class EmpathyTree extends NeoModel {
+public static class NeoTower extends NeoModel {
   public final static float R_BASE = 1.5 * METER;
-  public final static float R_TOP = 0.8 * METER;
-  public final static int LOOPS = 3;
-  public final static int STEP = 3;
+  public final static float R_TOP = 1.5 * METER;
+  public final static int LOOPS = 2;
+  public final static int STEP = 2;
   public final static int FEET_NUM = STEP * LOOPS;
   public final static float BEAM_LENGTH = 4.2 * METER;
   public final static float LED_STRIP_LENGTH = 5 * METER / 2;
@@ -13,7 +13,7 @@ public static class EmpathyTree extends NeoModel {
   public final List<Loop> loops;
   public final List<BeamPair> pairs;
 
-  EmpathyTree(JSONObject config) {
+  NeoTower(JSONObject config) {
     super(new Fixture(config));
     Fixture f = (Fixture)this.fixtures.get(0);
     loops = Collections.unmodifiableList(f.loops);
@@ -93,7 +93,7 @@ public static class EmpathyTree extends NeoModel {
       super(config);
 
       JSONArray confLoops = config.getJSONArray("loops");
-      for (int i = 0; i < 3; i++) {
+      for (int i = 0; i < LOOPS; i++) {
         Loop l = new Loop(confLoops.getJSONObject(i), i);
         loops.add(l);
         addPoints(l);
@@ -102,8 +102,8 @@ public static class EmpathyTree extends NeoModel {
   }
 
   public static class View extends UI3dComponent {
-    EmpathyTree model;
-    View(EmpathyTree model) {
+    NeoTower model;
+    View(NeoTower model) {
       this.model = model;
     }
     @Override
@@ -124,6 +124,7 @@ public static class EmpathyTree extends NeoModel {
 
     Loop(JSONObject config, int loopIdx) {
       super(new Fixture(config, loopIdx));
+      println("new Loop", loopIdx);
 
       Fixture f = (Fixture)this.fixtures.get(0);
       pairs = f.pairs;
@@ -163,7 +164,7 @@ public static class EmpathyTree extends NeoModel {
 
         JSONArray confPairs = config.getJSONArray("pairs");
         for (int i = 0; i < STEP; i++) {
-          BeamPair bp = new BeamPair(confPairs.getJSONObject(i), loopIdx + i*STEP);
+          BeamPair bp = new BeamPair(confPairs.getJSONObject(i), modulo(loopIdx + i*STEP, FEET_NUM));
           pairs.add(bp);
           addPoints(bp);
         }
@@ -177,6 +178,7 @@ public static class EmpathyTree extends NeoModel {
 
     BeamPair(JSONObject config, int pairIdx) {
       super(new Fixture(config, pairIdx));
+      println("new BeamPair", pairIdx);
       this.pairIdx = pairIdx;
       Fixture f = (Fixture)this.fixtures.get(0);
       left = f.left;
