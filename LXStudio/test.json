@@ -15,6 +15,18 @@
       "roty": 0,
       "rotz": 0
     },
+    "flower": {
+      "class": "NeoFlower",
+      "artnetAddress": "192.168.0.207",
+      "artnetUniverse": 0,
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "rotx": 0,
+      "roty": 0,
+      "rotz": 0
+    },
+
     "triangle": {
       "class": "NeoHex",
       "artnetAddress": "192.168.0.243",

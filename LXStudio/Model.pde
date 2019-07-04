@@ -74,7 +74,8 @@ public static class Model extends LXModel {
       // So juct create them here
       //addObject("hex", new NeoHex(config.getObject("hex")));
       //addObject("triangle", new NeoTriangle(config.getObject("triangle")));
-      addObject("tower", new NeoTower(config.getObject("tower")));
+      //addObject("tower", new NeoTower(config.getObject("tower")));
+      addObject("flower", new NeoFlower(config.getObject("flower")));
     }
   }
 }
