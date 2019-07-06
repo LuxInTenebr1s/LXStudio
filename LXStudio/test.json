@@ -26,6 +26,76 @@
       "roty": 0,
       "rotz": 0
     },
+    "flower": {
+      "class": "NeoFlower",
+      "petalNum": 3,
+      "petalSideLen": 3,
+      "petalBendAngle": -15,
+      "budSideLen": 2,
+      "budOpeningAngle": 20,
+      "petals": [
+        {
+          "sides": [
+            {
+              "artnetAddress": "192.168.5.184",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "192.168.5.232",
+              "artnetUniverse": 0
+            }
+          ]
+        },
+        {
+          "sides": [
+            {
+              "artnetAddress": "192.168.5.184",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "192.168.5.232",
+              "artnetUniverse": 0
+            }
+          ]
+        },
+        {
+          "sides": [
+            {
+              "artnetAddress": "192.168.5.184",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "192.168.5.232",
+              "artnetUniverse": 0
+            }
+          ]
+        },
+        {
+          "sides": [
+            {
+              "artnetAddress": "192.168.5.184",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "192.168.5.232",
+              "artnetUniverse": 0
+            }
+          ]
+        },
+        {
+          "sides": [
+            {
+              "artnetAddress": "192.168.5.184",
+              "artnetUniverse": 0
+            },
+            {
+              "artnetAddress": "192.168.5.232",
+              "artnetUniverse": 0
+            }
+          ]
+        }
+      ]
+    },
     "tower": {
       "class": "NeoTower",
       "loops": [
@@ -79,3 +149,4 @@
     }
   }
 }
+

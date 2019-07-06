@@ -18,7 +18,7 @@ public static class Model extends LXModel {
         displayPoints.add(p);
       }
     }
-    
+
     this.displayPoints = Collections.unmodifiableList(displayPoints);
 
     println("Leds: " + this.displayPoints.size());
@@ -53,7 +53,7 @@ public static class Model extends LXModel {
       addPoints(obj);
       this.objects.put(name, obj);
     }
-    
+
     Fixture(Config config) {
       /* Creating objects from config, java crap doesn't work */
       /*
@@ -74,7 +74,7 @@ public static class Model extends LXModel {
       // So juct create them here
       //addObject("hex", new NeoHex(config.getObject("hex")));
       //addObject("triangle", new NeoTriangle(config.getObject("triangle")));
-      addObject("tower", new NeoTower(config.getObject("tower")));
+      addObject("flower", new NeoFlower(config.getObject("flower")));
     }
   }
 }
