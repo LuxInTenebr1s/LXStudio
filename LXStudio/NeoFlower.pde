@@ -144,6 +144,8 @@ public static class NeoFlower extends NeoModel {
         count = (int)((budSideLen) / LED_PITCH);
         pitch = pBend.copy().sub(pBase).normalize().mult(LED_PITCH);
         pLed = pBase.copy();
+        // Add some orientation bias so diodes don't overlap
+        pLed.add(pBend.copy().set(pBend.x, pBend.y, 0).rotate(TWO_PI/4).normalize().mult(0.5*CM).mult(orient == Orientation.UP ? 1 : -1));
         while (count-- > 0) {
           LXPoint p = new LXPoint(pLed);
           addPoint(p);
@@ -153,6 +155,8 @@ public static class NeoFlower extends NeoModel {
         count = (int)((petalSideLen + (budSideLen % LED_PITCH)) / LED_PITCH);
         pitch = pTop.copy().sub(pBend).normalize().mult(LED_PITCH);
         pLed = pBend.copy().add(pitch.copy().normalize().mult(budSideLen % LED_PITCH));
+        // Add some orientation bias so diodes don't overlap
+        pLed.add(pitch.copy().normalize().mult(0.5*CM));
         while (count-- > 0) {
           LXPoint p = new LXPoint(pLed);
           addPoint(p);
