@@ -37,7 +37,7 @@ public static class NeoFlowerTestPattern extends NeoFlowerPattern {
     Mode mode = this.mode.getEnum();
     int petalIdx = this.petalIdx.getValuei();
     final int clOn = 0xFFFFFFFF;
-    final int clOff = 0x00000000;
+    final int clOff = 0xFF000000;
 
     int c = clOff;
     for (NeoFlower.Petal p : flower.petals) {
@@ -71,7 +71,7 @@ public static class FlowerWave extends NeoFlowerPattern {
   public final CompoundParameter width = new CompoundParameter("Width", .4, 0, 1)
     .setDescription("Thicness");
 
-  public final CompoundParameter offset = new CompoundParameter("Offset", .3, 0, 1)
+  public final CompoundParameter offset = new CompoundParameter("Offset", 0, 0, 1.0/flower.petalNum)
     .setDescription("Waves offset");
 
   public FlowerWave(LX lx) {
@@ -100,7 +100,7 @@ public static class FlowerWave extends NeoFlowerPattern {
             point = p.up.points[i];
 
           float distNorm = abs((float)i/p.size - pos); distNorm = min(distNorm, 1 - distNorm);
-          colors[point.index] = LXColor.gray(max(0, 100*(1 - (distNorm*distNorm)/(width/10))));
+          colors[point.index] = LXColor.gray(max(0, 100*(1 - (distNorm*distNorm)/(width/5)))) | 0xFF000000;
         }
         continue;
       }
@@ -108,20 +108,20 @@ public static class FlowerWave extends NeoFlowerPattern {
       for (int i = 0; i < p.up.size; i++) {
         LXPoint point = p.up.points[i];
         float distNorm = abs((float)i/p.up.size - pos); distNorm = min(distNorm, 1 - distNorm);
-        colors[point.index] = LXColor.gray(max(0, 100*(1-(distNorm*distNorm)/(width/10))));
+        colors[point.index] = LXColor.gray(max(0, 100*(1-(distNorm*distNorm)/(width/5)))) | 0xFF000000;
       }
       if (mode == Mode.TwoWave) {
         for (int i = 0; i < p.down.size; i++) {
           LXPoint point = p.down.points[i];
           float distNorm = abs((float)i/p.down.size - pos); distNorm = min(distNorm, 1 - distNorm);
-          colors[point.index] = LXColor.gray(max(0, 100*(1-(distNorm*distNorm)/(width/10))));
+          colors[point.index] = LXColor.gray(max(0, 100*(1-(distNorm*distNorm)/(width/5)))) | 0xFF000000;
         }
       }
       else {
         for (int i = 0; i < p.down.size; i++) {
           LXPoint point = p.down.points[i];
-          float distNorm = abs((float)(p.up.size - i - 1)/p.up.size - pos);
-          colors[point.index] = LXColor.gray(max(0, 100*(1-(distNorm*distNorm)/(width/10))));
+          float distNorm = abs((float)(p.up.size - i - 1)/p.up.size - pos); distNorm = min(distNorm, 1- distNorm);
+          colors[point.index] = LXColor.gray(max(0, 100*(1-(distNorm*distNorm)/(width/5)))) | 0xFF000000;
         }
       }
     }
