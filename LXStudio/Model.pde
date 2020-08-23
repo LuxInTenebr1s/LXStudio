@@ -88,11 +88,11 @@ public static class NeoModel extends LXModel {
 
   public void addDatagrams(LXDatagramOutput output) {
     String address = this.config.getString("artnetAddress", "");
-    int universe = this.config.getInt("artnetUniverse");
     if (address.length() == 0) {
       println("Empty artnetAddress, skipping");
       return;
     }
+    int universe = this.config.getInt("artnetUniverse");
     println("ArtNet datagram to " + address + ", universe", universe);
     try {
       ArtNetDatagram datagram = new ArtNetDatagram(this, this.config.getInt("artnetUniverse", 0));
