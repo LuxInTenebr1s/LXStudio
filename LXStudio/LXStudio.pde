@@ -104,6 +104,15 @@ static float modulo(float x, float mod) {
   return x;
 }
 
+static float wrap(float x, float mod) {
+  if (x < 0) {
+    x = abs(x);
+  }
+  if (x > mod) {
+    x = mod - (x - mod);
+  }
+  return x;
+}
 // check on which side of a line through [a, b] the point x is situated
 //private float pointRel(LXPoint x, LXVector a, LXVector b) {
 //}
