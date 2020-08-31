@@ -20,12 +20,66 @@
       "artnetAddress": "192.168.5.138",
       "artnetUniverse": 0,
       "x": 0,
+      "y": 300,
+      "z": 0,
+      "rotx": 0,
+      "roty": 0,
+      "rotz": 0
+    },
+    "matrix": {
+      "class": "NeoMatrix",
+      "rows": [
+        {
+          "artnetAddress": "192.168.5.203",
+          "artnetUniverse": 0
+        },
+        {
+          "artnetAddress": "192.168.5.184",
+          "artnetUniverse": 0
+        },
+        {
+          "artnetAddress": "192.168.5.232",
+          "artnetUniverse": 0
+        },
+        {
+          "artnetAddress": "192.168.5.185",
+          "artnetUniverse": 0
+        },
+        {
+          "artnetAddress": "192.168.5.164",
+          "artnetUniverse": 0
+        },
+
+
+        {
+          "artnetAddress": "192.168.5.241",
+          "artnetUniverse": 0
+        },
+        {
+          "artnetAddress": "192.168.5.179",
+          "artnetUniverse": 0
+        },
+        {
+          "artnetAddress": "192.168.5.199",
+          "artnetUniverse": 0
+        },
+        {
+          "artnetAddress": "192.168.5.196",
+          "artnetUniverse": 0
+        },
+        {
+          "artnetAddress": "192.168.5.186",
+          "artnetUniverse": 0
+        }
+      ],
+      "x": 0,
       "y": 0,
       "z": 0,
       "rotx": 0,
       "roty": 0,
       "rotz": 0
     },
+ 
     "tree": {
       "class": "EmpathyTree",
       "loops": [

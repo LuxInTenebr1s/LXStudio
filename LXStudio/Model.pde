@@ -56,8 +56,9 @@ public static class Model extends LXModel {
     
     Fixture(Config config) {
       //addObject("hex", new NeoHex(config.getObject("hex")));
-      addObject("tree", new EmpathyTree(config.getObject("tree")));
-      addObject("triangle", new NeoTriangle(config.getObject("triangle")));
+      //addObject("tree", new EmpathyTree(config.getObject("tree")));
+      //addObject("triangle", new NeoTriangle(config.getObject("triangle")));
+      addObject("matrix", new NeoMatrix(config.getObject("matrix")));
       /*
       JSONObject objs = config.getObjects();
       for (String name : (String[])objs.keys().toArray(new String[objs.size()])) {
