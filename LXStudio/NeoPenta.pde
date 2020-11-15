@@ -139,7 +139,7 @@ public static class NeoPenta extends NeoModel {
 
     void draw(heronarts.p3lx.ui.UI ui, PGraphics pg) {
       pg.stroke(#966F33);
-      pg.line(chordStart.x - chord.x, chordStart.y - chord.y, 0.0,
+      pg.line(chordStart.x + chord.x, chordStart.y + chord.y, 0.0,
               chordStart.x, chordStart.y, 0.0);
 }
 
@@ -148,19 +148,19 @@ public static class NeoPenta extends NeoModel {
 
       Fixture(float radius, int index) {
         float x, x1, y, y1;
-        int off = index * 2 % 5;
+        int off = index * 2 % 5 * (-1);
 
         x = radius * cos(CHORD_STARTING_ANGLE - (off * CHORD_ANGLE));
         y = radius * sin(CHORD_STARTING_ANGLE - (off * CHORD_ANGLE));
-        x1 = radius * cos(CHORD_STARTING_ANGLE - ((off + 2) * CHORD_ANGLE));
-        y1 = radius * sin(CHORD_STARTING_ANGLE - ((off + 2) * CHORD_ANGLE));
+        x1 = radius * cos(CHORD_STARTING_ANGLE - ((off - 2) * CHORD_ANGLE));
+        y1 = radius * sin(CHORD_STARTING_ANGLE - ((off - 2) * CHORD_ANGLE));
 
         chordStart = new LXVector(x, y, 0.0);
         chord = new LXVector(x1, y1, 0.0).sub(chordStart);
         chordStep = chord.copy().normalize().mult(LED_PITCH);
 
         for (int i = 0; i < (chord.mag() / LED_PITCH); i++) {
-          LXPoint p = new LXPoint(chordStart.add(chordStep));
+          LXPoint p = new LXPoint(chordStart.copy().add(chordStep.copy().mult(i)));
           addPoint(p);
         }
       }
