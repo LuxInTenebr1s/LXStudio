@@ -26,6 +26,20 @@
       "roty": 0,
       "rotz": 0
     },
+    "penta": {
+      "class": "NeoPenta",
+      "circleLen": 5,
+      "circle":
+        {
+          "artnetAddress": "192.168.0.48",
+          "artnetUniverse": 0
+        },
+      "star":
+        {
+          "artnetAddress": "192.168.0.85",
+          "artnetUniverse": 0
+        }
+    },
     "flower": {
       "class": "NeoFlower",
       "petalNum": 3,
