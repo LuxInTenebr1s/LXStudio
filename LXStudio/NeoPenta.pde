@@ -2,8 +2,9 @@ public static class NeoPenta extends NeoModel {
   public final static float LED_PITCH = METER / 60 * 3;
 
   public final static int CHORD_COUNT = 5;
-  public final static float CHORD_ANGLE = TWO_PI / 5.0;
+  public final static float CHORD_ANGLE = TWO_PI / 5;
   public final static float CHORD_STARTING_ANGLE = -TWO_PI / 4.0;
+  public final static int CHORD_LEDS_NUM = 28;
 
   public final Circle circle;
   public final Star star;
@@ -147,7 +148,7 @@ public static class NeoPenta extends NeoModel {
       public final LXVector chordStart, chord, chordStep;
 
       Fixture(float radius, int index) {
-        float x, x1, y, y1;
+        float x, x1, y, y1, chord_led_pitch;
         int off = index * 2 % 5 * (-1);
 
         x = radius * cos(CHORD_STARTING_ANGLE - (off * CHORD_ANGLE));
@@ -157,9 +158,11 @@ public static class NeoPenta extends NeoModel {
 
         chordStart = new LXVector(x, y, 0.0);
         chord = new LXVector(x1, y1, 0.0).sub(chordStart);
-        chordStep = chord.copy().normalize().mult(LED_PITCH);
 
-        for (int i = 0; i < (chord.mag() / LED_PITCH); i++) {
+        chord_led_pitch = chord.mag() / CHORD_LEDS_NUM;
+        chordStep = chord.copy().normalize().mult(chord_led_pitch);
+
+        for (int i = 0; i < CHORD_LEDS_NUM; i++) {
           LXPoint p = new LXPoint(chordStart.copy().add(chordStep.copy().mult(i)));
           addPoint(p);
         }
